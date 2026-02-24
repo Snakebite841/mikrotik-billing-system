@@ -1,0 +1,63 @@
+﻿[dotenv@17.3.1] injecting env (4) from .env -- tip: ΓÜÖ∩╕Å  specify custom .env file path with { path: '/custom/path/.env' }
+node : D:\HomeBilling\b
+ackend\mikrotikService.
+js:158
+At line:1 char:1
++ node 
+backend/server.js 2>&1 
+| Out-File -Encoding 
+utf8 server_error.tx 
+...
++ ~~~~~~~~~~~~~~~~~~~~~
+~~~~~~
+    + CategoryInfo     
+         : NotSpecifi  
+  ed: (D:\HomeBillin   
+ g\...kService.js:1    
+58:String) [], Rem    
+oteException
+    + FullyQualifiedEr 
+   rorId : NativeComm  
+  andError
+ 
+    async 
+getActiveUsers() {
+          
+^^^^^^^^^^^^^^
+
+SyntaxError: 
+Unexpected identifier 
+'getActiveUsers'
+    at wrapSafe (node:i
+nternal/modules/cjs/loa
+der:1735:18)
+    at Module._compile 
+(node:internal/modules/
+cjs/loader:1778:20)
+    at Object..js (node
+:internal/modules/cjs/l
+oader:1936:10)
+    at Module.load (nod
+e:internal/modules/cjs/
+loader:1525:32)
+    at Module._load (no
+de:internal/modules/cjs
+/loader:1327:12)
+    at TracingChannel.t
+raceSync (node:diagnost
+ics_channel:328:14)
+    at wrapModuleLoad (
+node:internal/modules/c
+js/loader:245:24)
+    at Module.require (
+node:internal/modules/c
+js/loader:1548:12)
+    at require (node:in
+ternal/modules/helpers:
+152:16)
+    at 
+Object.<anonymous> (D:\
+HomeBilling\backend\ser
+ver.js:5:25)
+
+Node.js v24.13.1

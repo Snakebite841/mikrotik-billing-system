@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TRANS-AI-GLOBA-NET</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <!-- Ionicons for beautiful icons -->
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</head>
+
+<body>
+    <div class="background-shapes">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="shape shape-3"></div>
+    </div>
+
+    <div class="app-container glass-panel">
+        <aside class="sidebar">
+            <div class="logo">
+                <ion-icon name="wifi-outline"></ion-icon>
+                <h2>TRANS-AI-GLOBA-NET</h2>
+            </div>
+            <nav class="nav-menu">
+                <a href="#" class="nav-item active" data-view="dashboard">
+                    <ion-icon name="grid-outline"></ion-icon>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#" class="nav-item" data-view="vouchers">
+                    <ion-icon name="ticket-outline"></ion-icon>
+                    <span>Vouchers</span>
+                </a>
+                <a href="#" class="nav-item" data-view="profiles">
+                    <ion-icon name="speedometer-outline"></ion-icon>
+                    <span>Bandwidth Profiles</span>
+                </a>
+                <a href="#" class="nav-item" data-view="active-sessions">
+                    <ion-icon name="pulse-outline"></ion-icon>
+                    <span>Active Sessions</span>
+                </a>
+                <a href="#" class="nav-item" data-view="routers">
+                    <ion-icon name="server-outline"></ion-icon>
+                    <span>Routers</span>
+                </a>
+            </nav>
+            <div class="connection-status">
+                <div class="status-indicator offline" id="status-indicator"></div>
+                <span id="status-text">Connecting...</span>
+            </div>
+        </aside>
+
+        <main class="content-area">
+            <!-- Dashboard View -->
+            <section id="dashboard-view" class="view-section active">
+                <header class="view-header">
+                    <h1>Overview</h1>
+                    <p>Welcome to your network billing dashboard.</p>
+                </header>
+                <div class="stats-grid">
+                    <div class="stat-card glass-element">
+                        <div class="stat-icon"><ion-icon name="people-outline"></ion-icon></div>
+                        <div class="stat-details">
+                            <h3>Active Vouchers</h3>
+                            <p class="stat-number" id="stat-vouchers">0</p>
+                        </div>
+                    </div>
+                    <div class="stat-card glass-element">
+                        <div class="stat-icon" style="color: #6366f1; background: rgba(99, 102, 241, 0.2);"><ion-icon
+                                name="wallet-outline"></ion-icon></div>
+                        <div class="stat-details">
+                            <h3>Potential Revenue</h3>
+                            <p class="stat-number" id="stat-revenue">GH₵0</p>
+                        </div>
+                    </div>
+                    <div class="stat-card glass-element">
+                        <div class="stat-icon"><ion-icon name="speedometer-outline"></ion-icon></div>
+                        <div class="stat-details">
+                            <h3>Bandwidth Profiles</h3>
+                            <p class="stat-number" id="stat-profiles">0</p>
+                        </div>
+                    </div>
+                    <!-- System Resources -->
+                    <div class="stat-card glass-element">
+                        <div class="stat-icon" style="color: #10b981; background: rgba(16, 185, 129, 0.2);"><ion-icon
+                                name="hardware-chip-outline"></ion-icon></div>
+                        <div class="stat-details">
+                            <h3>CPU Load</h3>
+                            <p class="stat-number" id="stat-cpu">0%</p>
+                        </div>
+                    </div>
+                    <div class="stat-card glass-element">
+                        <div class="stat-icon" style="color: #f59e0b; background: rgba(245, 158, 11, 0.2);"><ion-icon
+                                name="server-outline"></ion-icon></div>
+                        <div class="stat-details">
+                            <h3>Free Memory</h3>
+                            <p class="stat-number" id="stat-ram">0 MB</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Vouchers View -->
+            <section id="vouchers-view" class="view-section">
+                <header class="view-header">
+                    <div class="header-left">
+                        <h1>Voucher Management</h1>
+                        <p>Generate and manage access codes</p>
+                    </div>
+                    <div style="display: flex; gap: 10px;">
+                        <button class="btn btn-secondary" onclick="app.exportVouchersCSV()">
+                            <ion-icon name="download-outline"></ion-icon> Export CSV
+                        </button>
+                        <button class="btn btn-secondary" onclick="app.printVouchers()">
+                            <ion-icon name="print-outline"></ion-icon> Print
+                        </button>
+                        <button class="btn btn-primary" onclick="app.openModal('generate-modal')">
+                            <ion-icon name="add-circle-outline"></ion-icon> Generate
+                        </button>
+                    </div>
+                </header>
+
+                <div class="table-container glass-element">
+                    <table class="data-table" id="vouchers-table">
+                        <thead>
+                            <tr>
+                                <th>Code (Username/Password)</th>
+                                <th>Profile</th>
+                                <th>Uptime</th>
+                                <th>Traffic (In/Out)</th>
+                                <th class="no-print">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="vouchers-table-body">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Active Sessions View -->
+            <section id="active-sessions-view" class="view-section">
+                <header class="view-header">
+                    <div class="header-left">
+                        <h1>Active Sessions</h1>
+                        <p>Real-time connected users</p>
+                    </div>
+                    <button class="btn btn-secondary" onclick="app.loadActiveSessions()">
+                        <ion-icon name="refresh-outline"></ion-icon> Refresh
+                    </button>
+                </header>
+
+                <div class="table-container glass-element">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>IP & MAC Address</th>
+                                <th>Uptime</th>
+                                <th>Traffic (In/Out)</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="active-table-body">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Profiles View -->
+            <section id="profiles-view" class="view-section">
+                <header class="view-header">
+                    <div class="header-left">
+                        <h1>Bandwidth Profiles</h1>
+                        <p>Configure speed limits and packages</p>
+                    </div>
+                    <button class="btn btn-primary" onclick="app.openModal('profile-modal')">
+                        <ion-icon name="add-circle-outline"></ion-icon> Create Profile
+                    </button>
+                </header>
+
+                <div class="table-container glass-element">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Profile Name</th>
+                                <th>Rate Limit</th>
+                                <th>Price</th>
+                                <th>Validity</th>
+                                <th>Data Limit</th>
+                                <th>Shared</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="profiles-table-body">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+            <!-- Routers View -->
+            <section id="routers-view" class="view-section">
+                <header class="view-header">
+                    <div class="header-left">
+                        <h1>Routers Management</h1>
+                        <p>Manage connection to Mikrotik routers</p>
+                    </div>
+                    <button class="btn btn-primary" onclick="app.openModal('router-modal')">
+                        <ion-icon name="add-circle-outline"></ion-icon> Add Router
+                    </button>
+                </header>
+
+                <div class="table-container glass-element">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Router Name</th>
+                                <th>Host / IP</th>
+                                <th>User</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="routers-table-body">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <!-- Add Router Modal -->
+    <div class="modal-overlay" id="router-modal">
+        <div class="modal-content glass-panel">
+            <div class="modal-header">
+                <h2>Add New Router</h2>
+                <button class="close-btn" onclick="app.closeModal('router-modal')"><ion-icon
+                        name="close-outline"></ion-icon></button>
+            </div>
+            <div class="modal-body">
+                <form id="router-form">
+                    <div class="form-group">
+                        <label for="router-name">Friendly Name</label>
+                        <input type="text" id="router-name" placeholder="e.g. Main Router" required class="glass-input">
+                    </div>
+                    <div class="form-group">
+                        <label for="router-host">Host or IP Address</label>
+                        <input type="text" id="router-host" placeholder="e.g. 192.168.88.1" required
+                            class="glass-input">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="router-user">API Username</label>
+                            <input type="text" id="router-user" placeholder="admin" required class="glass-input">
+                        </div>
+                        <div class="form-group">
+                            <label for="router-pass">API Password</label>
+                            <input type="password" id="router-pass" placeholder="leave empty if none"
+                                class="glass-input">
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary"
+                            onclick="app.closeModal('router-modal')">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save Router</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Generate Vouchers Modal -->
+    <div class="modal-overlay" id="generate-modal">
+        <div class="modal-content glass-panel">
+            <div class="modal-header">
+                <h2>Generate New Vouchers</h2>
+                <button class="close-btn" onclick="app.closeModal('generate-modal')"><ion-icon
+                        name="close-outline"></ion-icon></button>
+            </div>
+            <div class="modal-body">
+                <form id="generate-form">
+                    <div class="form-group">
+                        <label for="voucher-count">Number of Vouchers</label>
+                        <input type="number" id="voucher-count" min="1" max="100" value="10" required
+                            class="glass-input">
+                    </div>
+                    <div class="form-group">
+                        <label for="voucher-profile">Select Profile</label>
+                        <select id="voucher-profile" required class="glass-input">
+                            <!-- Populated dynamically -->
+                        </select>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="voucher-prefix">Prefix (Optional)</label>
+                            <input type="text" id="voucher-prefix" placeholder="e.g. VIP-" class="glass-input">
+                        </div>
+                        <div class="form-group">
+                            <label for="voucher-length">Code Length</label>
+                            <input type="number" id="voucher-length" min="4" max="16" value="6" required
+                                class="glass-input">
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary"
+                            onclick="app.closeModal('generate-modal')">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Generate</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Profile Modal -->
+    <div class="modal-overlay" id="profile-modal">
+        <div class="modal-content glass-panel">
+            <div class="modal-header">
+                <h2 id="profile-modal-title">Create Bandwidth Profile</h2>
+                <button class="close-btn" onclick="app.closeModal('profile-modal')"><ion-icon
+                        name="close-outline"></ion-icon></button>
+            </div>
+            <div class="modal-body">
+                <form id="profile-form">
+                    <input type="hidden" id="profile-id">
+                    <div class="form-group">
+                        <label for="profile-name">Package Name</label>
+                        <input type="text" id="profile-name" placeholder="e.g. 10Mbps-Plan" required
+                            class="glass-input">
+                    </div>
+                    <div class="form-group">
+                        <label for="profile-limit">Rate Limit (Rx/Tx) (Optional)</label>
+                        <input type="text" id="profile-limit" placeholder="e.g. 5M/5M" class="glass-input">
+                        <small class="form-help">Format: Upload/Download (e.g. 2M/5M). Leave empty for
+                            unlimited.</small>
+                    </div>
+                    <div class="form-row" style="margin-bottom: 1.5rem;">
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label for="profile-shared">Shared Users</label>
+                            <input type="number" id="profile-shared" min="1" value="1" required class="glass-input">
+                        </div>
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label for="profile-price">Price (GH₵)</label>
+                            <input type="number" id="profile-price" step="0.01" min="0" value="0.00"
+                                class="glass-input">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="profile-validity">Validity</label>
+                            <input type="text" id="profile-validity" placeholder="e.g. 30d, 5h (Optional)"
+                                class="glass-input">
+                        </div>
+                        <div class="form-group">
+                            <label for="profile-data">Data Limit</label>
+                            <input type="text" id="profile-data" placeholder="e.g. 5G, 500M (Optional)"
+                                class="glass-input">
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary"
+                            onclick="app.closeModal('profile-modal')">Cancel</button>
+                        <button type="submit" class="btn btn-primary" id="profile-submit-btn">Create Profile</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast-container"></div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>
